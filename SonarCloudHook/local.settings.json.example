@@ -1,7 +1,9 @@
 {
     "IsEncrypted": false,
-    "Values": {
-        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet"
-    }
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "SonarPAT": "YOUR_SONAR_CLOUD_PERSONAL_ACCESS_TOKEN",
+    "GitHubPAT": "YOUR_GIT_HUB_PERSONAL_ACCESS_TOKEN"
+  }
 }

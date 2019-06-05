@@ -28,9 +28,9 @@ namespace SonarCloudHook
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(
                     System.Text.ASCIIEncoding.ASCII.GetBytes(
-                        string.Format("{0}:{1}", "", PAT))));
+                        string.Format("{0}:{1}", PAT, ""))));
             gitHubClient = new GitHubClient(new ProductHeaderValue("CIHookFunctino"));
-            var tokenAuth = new Credentials(Environment.GetEnvironmentVariable("GitHubPAT"));
+            var tokenAuth = new Credentials("TsuyoshiUshio",Environment.GetEnvironmentVariable("GitHubPAT"));
             gitHubClient.Credentials = tokenAuth; 
         }
 
@@ -56,9 +56,18 @@ namespace SonarCloudHook
 
              foreach(var issue in issues.issues)
             {
+                var path = issue.component.Replace("TsuyoshiUshio_VulnerableApp:","");
+                
+                if (path != "TsuyoshiUshio_VulnerableApp")
+                {
+                    var comment = new PullRequestReviewCommentCreate($"[{issue.type}] {issue.message}", commitId, path, 5);
+                    await gitHubClient.PullRequest.ReviewComment.Create("TsuyoshiUshio", "VulnerableApp", int.Parse(pullRequestId), comment);
+                }
+                {
+                  //  var comment = new PullRequestReviewCommentCreate(issue.message, commitId, "TsuyoshiUshio_VulnerableApp", issue.line);
+                  //  await gitHubClient.PullRequest.ReviewComment.Create("TsuyoshiUshio", "VulnerableApp", int.Parse(pullRequestId), comment);
 
-                var comment = new PullRequestReviewCommentCreate(issue.message, commitId, issue.component, issue.line);
-                await gitHubClient.PullRequest.ReviewComment.Create("TsuyoshiUshio", "VulnerableApp", int.Parse(pullRequestId), comment);
+                }
             }
 
             return (ActionResult)new OkObjectResult($"Done");
